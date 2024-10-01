@@ -63,25 +63,46 @@ class ColorConverterApp:
         self.k_entry = ttk.Entry(self.root, textvariable=self.k_value, width=5)
         self.k_entry.grid(row=5, column=4, padx=5, pady=5)
 
+        self.c_slider = tk.Scale(self.root, from_=0, to=1, resolution=0.01, orient="horizontal", variable=self.c_value, command=lambda _: self.update_from_cmyk())
+        self.c_slider.grid(row=6, column=1, columnspan=4, sticky="we", padx=5, pady=5)
+
+        self.m_slider = tk.Scale(self.root, from_=0, to=1, resolution=0.01, orient="horizontal", variable=self.m_value, command=lambda _: self.update_from_cmyk())
+        self.m_slider.grid(row=7, column=1, columnspan=4, sticky="we", padx=5, pady=5)
+
+        self.y_slider = tk.Scale(self.root, from_=0, to=1, resolution=0.01, orient="horizontal", variable=self.y_value, command=lambda _: self.update_from_cmyk())
+        self.y_slider.grid(row=8, column=1, columnspan=4, sticky="we", padx=5, pady=5)
+        
+        self.k_slider = tk.Scale(self.root, from_=0, to=1, resolution=0.01, orient="horizontal", variable=self.k_value, command=lambda _: self.update_from_cmyk())
+        self.k_slider.grid(row=9, column=1, columnspan=4, sticky="we", padx=5, pady=5)
+
         # HSV Inputs
         self.hsv_label = ttk.Label(self.root, text="HSV:")
-        self.hsv_label.grid(row=6, column=0, padx=5, pady=5, sticky="e")
+        self.hsv_label.grid(row=10, column=0, padx=5, pady=5, sticky="e")
 
         self.h_value = tk.DoubleVar()
         self.s_value = tk.DoubleVar()
         self.v_value = tk.DoubleVar()
 
         self.h_entry = ttk.Entry(self.root, textvariable=self.h_value, width=5)
-        self.h_entry.grid(row=6, column=1, padx=5, pady=5)
+        self.h_entry.grid(row=10, column=1, padx=5, pady=5)
 
         self.s_entry = ttk.Entry(self.root, textvariable=self.s_value, width=5)
-        self.s_entry.grid(row=6, column=2, padx=5, pady=5)
+        self.s_entry.grid(row=10, column=2, padx=5, pady=5)
 
         self.v_entry = ttk.Entry(self.root, textvariable=self.v_value, width=5)
-        self.v_entry.grid(row=6, column=3, padx=5, pady=5)
+        self.v_entry.grid(row=10, column=3, padx=5, pady=5)
+
+        self.h_slider = tk.Scale(self.root, from_=0, to=360, orient="horizontal", variable=self.h_value, command=lambda _: self.update_from_hsv())
+        self.h_slider.grid(row=11, column=1, columnspan=4, sticky="we", padx=5, pady=5)
+
+        self.s_slider = tk.Scale(self.root, from_=0, to=100, orient="horizontal", variable=self.s_value, command=lambda _: self.update_from_hsv())
+        self.s_slider.grid(row=12, column=1, columnspan=4, sticky="we", padx=5, pady=5)
+
+        self.v_slider = tk.Scale(self.root, from_=0, to=100, orient="horizontal", variable=self.v_value, command=lambda _: self.update_from_hsv())
+        self.v_slider.grid(row=13, column=1, columnspan=4, sticky="we", padx=5, pady=5)
 
         self.choose_color_button = ttk.Button(self.root, text="Choose Color", command=self.choose_color)
-        self.choose_color_button.grid(row=7, column=0, columnspan=5, pady=10)
+        self.choose_color_button.grid(row=14, column=0, columnspan=5, pady=10)
 
     def bind_events(self):
         self.r_entry.bind("<KeyRelease>", lambda event: self.update_from_rgb())
@@ -198,6 +219,6 @@ class ColorConverterApp:
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.geometry("500x600")
+    root.geometry("500x1100")
     app = ColorConverterApp(root)
     root.mainloop()
