@@ -27,6 +27,7 @@ class ImageProcessingApp:
         self.high_pass_filter_button.pack()
 
         self.image = None
+        self.max_image_size = (1900, 1080)
 
     def load_image(self):
         file_path = filedialog.askopenfilename()
@@ -35,6 +36,11 @@ class ImageProcessingApp:
             self.display_image(self.image)
 
     def display_image(self, img):
+        img_height, img_width = img.shape[:2]
+        scale = min(self.max_image_size[0] / img_width, self.max_image_size[1] / img_height)
+        if scale < 1: 
+            img = cv2.resize(img, (int(img_width * scale), int(img_height * scale)))
+
         img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img_pil = Image.fromarray(img_rgb)
         img_tk = ImageTk.PhotoImage(img_pil)
@@ -55,7 +61,6 @@ class ImageProcessingApp:
             r_eq = cv2.equalizeHist(r)
             rgb_eq_img = cv2.merge((b_eq, g_eq, r_eq))
 
-            # self.display_image(eq_img)
             plt.figure(figsize=(10, 5))
             plt.subplot(1, 2, 1)
             plt.title("Эквализация в пространстве HSV")
@@ -83,35 +88,6 @@ class ImageProcessingApp:
 
             plt.show()
 
-    # def high_pass_filter(self):
-    #     if self.image is not None:
-    #         # Применение фильтра Лапласа для увеличения резкости
-    #         laplacian = cv2.Laplacian(self.image, cv2.CV_64F)
-
-    #         # Нормализация значений пикселей
-    #         sharp_img = cv2.convertScaleAbs(laplacian)
-    #         sharp_img = cv2.normalize(sharp_img, None, 0, 255, cv2.NORM_MINMAX)
-
-    #         print("Минимальное значение sharp_img:", np.min(sharp_img))
-    #         print("Максимальное значение sharp_img:", np.max(sharp_img))
-
-
-    #         # Отображение исходного и увеличенного резкости изображения
-    #         plt.figure(figsize=(10, 5))
-            
-    #         # Отображение исходного изображения
-    #         plt.subplot(1, 2, 1)
-    #         plt.title("Исходное изображение")
-    #         plt.imshow(cv2.cvtColor(self.image, cv2.COLOR_BGR2RGB))
-    #         plt.axis('off')
-
-    #         # Отображение изображения с высоким контрастом
-    #         plt.subplot(1, 2, 2)
-    #         plt.title("Изображение с высоким контрастом")
-    #         plt.imshow(cv2.cvtColor(sharp_img, cv2.COLOR_BGR2RGB))
-    #         plt.axis('off')
-
-    #         plt.show()
     def high_pass_filter(self):
         if self.image is not None:
             blurred = cv2.GaussianBlur(self.image, (5, 5), 0)
